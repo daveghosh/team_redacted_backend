@@ -55,6 +55,25 @@ const getCards = (request, response) => {
   })
 }
 
+const getPlayerCards = (request, response) => {
+  const player = request.params.player;
+  pool.query('SELECT * FROM cards WHERE playerid = $1, ORDER BY cardno ASC', [player], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
+const getSolution = (request, response) => {
+  pool.query('SELECT * FROM cards WHERE playerid = $1, ORDER BY cardno ASC', [null], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+}
+
 const resetCards = (request, response) => {
   pool.query('UPDATE cards SET playerid = $1, RETURNING *;', [null], (error, results) => {
     if (error) {
@@ -218,6 +237,8 @@ module.exports = {
   updateTurn,
 
   getCards,
+  getPlayerCards,
+  getSolution,
   resetCards,
   setCardPlayer,
 

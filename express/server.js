@@ -18,6 +18,8 @@ router.post('/turn/:turn', db.updateTurn)
 router.post('/gameMode/:mode', db.updateGameMode);
 
 router.get('/cards', db.getCards)
+router.get('/solution', db.getSolution)
+router.get('/cards/:player', db.getPlayerCards)
 router.post('/card/:id/player/:player', db.setCardPlayer)
 router.post('/resetCards', db.resetCards)
 
