@@ -6,6 +6,10 @@ const pool = new Pool({
   max: 3
 });
 
+pool.on('error', (err, client) => {
+  console.error('Unexpected error on idle client', err)
+})
+
 // game queries
 const getGames = (request, response) => {
   pool.query('SELECT * FROM games ORDER BY id ASC', (error, results) => {
