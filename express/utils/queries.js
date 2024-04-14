@@ -9,9 +9,8 @@ const getPool = () => {
       max: 4,
       connectionString
     });
-  } else {
-    return pool;
   }
+  return pool;
 }
 
 // game queries
