@@ -57,7 +57,7 @@ const getCards = (request, response) => {
 
 const getPlayerCards = (request, response) => {
   const player = request.params.player;
-  pool.query('SELECT * FROM cards WHERE playerid = $1, ORDER BY cardno ASC', [player], (error, results) => {
+  pool.query('SELECT * FROM cards WHERE playerid = $1 ORDER BY cardno ASC', [player], (error, results) => {
     if (error) {
       throw error
     }
@@ -66,7 +66,7 @@ const getPlayerCards = (request, response) => {
 }
 
 const getSolution = (request, response) => {
-  pool.query('SELECT * FROM cards WHERE playerid = $1, ORDER BY cardno ASC', [null], (error, results) => {
+  pool.query('SELECT * FROM cards WHERE playerid IS NULL ORDER BY cardno ASC', (error, results) => {
     if (error) {
       throw error
     }
@@ -118,7 +118,7 @@ const removePlayers = (request, response) => {
 const removePlayer = (request, response) => {
   const playerId = request.params.player;
 
-  pool.query('UPDATE players SET canmove = $1 WHERE id = $1 RETURNING *;', [false, playerId], (error, results) => {
+  pool.query('UPDATE players SET canmove = $1 WHERE id = $1, RETURNING *;', [false, playerId], (error, results) => {
     if (error) {
       throw error
     }
@@ -132,7 +132,7 @@ const addPlayer = (request, response) => {
   const loc = request.params.loc;
   const color = request.params.color;
 
-  pool.query('INSERT INTO players (id, loc, color, cansuggest, canmove) VALUES ($1, $2, $3, $4, $5) RETURNING *', [id, loc, color, false, true], (error, results) => {
+  pool.query('INSERT INTO players (id, loc, color, cansuggest, canmove) VALUES ($1, $2, $3, $4, $5), RETURNING *', [id, loc, color, false, true], (error, results) => {
     if (error) {
       throw error
     }
@@ -145,7 +145,7 @@ const updatePlayerLocation = (request, response) => {
   const playerId = request.params.id;
   const loc = request.params.loc;
 
-  pool.query('UPDATE players SET loc = $1 WHERE id = $2 RETURNING *;', [loc, playerId], (error, results) => {
+  pool.query('UPDATE players SET loc = $1 WHERE id = $2, RETURNING *;', [loc, playerId], (error, results) => {
     if (error) {
       throw error
     }
@@ -168,7 +168,7 @@ const updateWeaponLocation = (request, response) => {
   const weaponId = request.params.id;
   const loc = request.params.loc;
 
-  pool.query('UPDATE weapons SET loc = $1 WHERE weapon_id = $2 RETURNING *;', [loc, weaponId], (error, results) => {
+  pool.query('UPDATE weapons SET loc = $1 WHERE weapon_id = $2, RETURNING *;', [loc, weaponId], (error, results) => {
     if (error) {
       throw error
     }
