@@ -163,7 +163,20 @@ const updateCanSuggest = (request, response) => {
     if (error) {
       throw error
     }
-    response.status(201).send(`Moved player with id: ${results.rows[0].id}`)
+    response.status(201).send(`Update player with id: ${results.rows[0].id}`)
+  })
+}
+
+const updateCanMove = (request, response) => {
+
+  const playerId = request.params.id;
+  const canSuggest = request.params.move;
+
+  pool.query('UPDATE players SET canmove = $1 WHERE id = $2 RETURNING *;', [canMove, playerId], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(201).send(`Update player with id: ${results.rows[0].id}`)
   })
 }
 
@@ -262,6 +275,7 @@ module.exports = {
   addPlayer,
   updatePlayerLocation,
   updateCanSuggest,
+  updateCanMove,
 
   getWeapons,
   updateWeaponLocation,
