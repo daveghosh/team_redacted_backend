@@ -232,7 +232,7 @@ const finishSuggestion = (request, response) => {
 
 
 module.exports = {
-  getGame,
+  getGames,
   resetGame, 
   updateGameMode,
   updateTurn,
