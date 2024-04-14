@@ -2,8 +2,8 @@ const Pool = require('pg').Pool;
 
 const connectionString = process.env.CONNECTION_STRING;
 const pool = new Pool({
-connectionString,
-max: 5
+  connectionString,
+  max: 3
 });
 
 // game queries
