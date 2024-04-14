@@ -35,7 +35,8 @@ router.get('/weapons', db.getWeapons)
 router.post('/updateLocation/weapon/:id/:loc', db.updateWeaponLocation)
 
 router.get('/suggestion', db.getSuggestion)
-router.post('/suggestion/:player/:weapon:/:room/:person', db.makeSuggestion)
+router.post('/suggest/:player', db.setSuggestionPlayer);
+router.post('/suggestion/:weapon:/:room/:person', db.makeSuggestion)
 router.post('/suggestionMode/:mode', db.updateSuggestionMode)
 router.post('/counter/:counter', db.submitCounter);
 router.post('/finishSuggestion', db.finishSuggestion);

@@ -223,13 +223,23 @@ const updateSuggestionMode = (request, response) => {
   })
 }
 
-const makeSuggestion = (request, response) => {
+const setSuggestionPlayer = (request, response) => {
   const player = request.params.player;
+
+  pool.query('UPDATE suggestions SET player = $1 RETURNING *;', [player], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(201).send(`Updated suggestion`)
+  })
+}
+
+const makeSuggestion = (request, response) => {
   const weapon = request.params.weapon;
   const room = request.params.room;
   const person = request.params.person;
 
-  pool.query('UPDATE suggestions SET player = $1 weapon = $2, room = $3, person = $4, mode = $5 RETURNING *;', [player, weapon, room, person, 'S'], (error, results) => {
+  pool.query('UPDATE suggestions SET weapon = $2, room = $3, person = $4, mode = $5 RETURNING *;', [weapon, room, person, 'S'], (error, results) => {
     if (error) {
       throw error
     }
@@ -282,6 +292,7 @@ module.exports = {
 
   getSuggestion,
   updateSuggestionMode,
+  setSuggestionPlayer,
   makeSuggestion,
   submitCounter,
   finishSuggestion
