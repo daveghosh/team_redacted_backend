@@ -154,6 +154,19 @@ const updatePlayerLocation = (request, response) => {
   })
 }
 
+const updateCanSuggest = (request, response) => {
+
+  const playerId = request.params.id;
+  const canSuggest = request.params.suggest;
+
+  pool.query('UPDATE players SET cansuggest = $1 WHERE id = $2 RETURNING *;', [canSuggest, playerId], (error, results) => {
+    if (error) {
+      throw error
+    }
+    response.status(201).send(`Moved player with id: ${results.rows[0].id}`)
+  })
+}
+
 // weapon queries
 const getWeapons = (request, response) => {
   pool.query('SELECT * FROM weapons ORDER BY id ASC', (error, results) => {
@@ -248,6 +261,7 @@ module.exports = {
   removePlayer,
   addPlayer,
   updatePlayerLocation,
+  updateCanSuggest,
 
   getWeapons,
   updateWeaponLocation,

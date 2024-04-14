@@ -28,6 +28,7 @@ router.post('/player/:id/:loc/:color', db.addPlayer)
 router.delete('/removePlayers', db.removePlayers)
 router.post('/removePlayer/:id', db.removePlayer)
 router.post('/updateLocation/player/:id/:loc', db.updatePlayerLocation)
+router.post('/canSuggest/:id/:suggest', db.updateCanSuggest)
 
 router.get('/weapons', db.getWeapons)
 router.post('/updateLocation/weapon/:id/:loc', db.updateWeaponLocation)
