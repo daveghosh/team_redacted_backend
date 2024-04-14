@@ -57,7 +57,7 @@ const getCards = (request, response) => {
 
 const getPlayerCards = (request, response) => {
   const player = request.params.player;
-  pool.query('SELECT * FROM cards WHERE playerid = $1 ORDER BY id ASC', [player], (error, results) => {
+  pool.query('SELECT * FROM cards WHERE player_id = $1 ORDER BY id ASC', [player], (error, results) => {
     if (error) {
       throw error
     }
@@ -66,7 +66,7 @@ const getPlayerCards = (request, response) => {
 }
 
 const getSolution = (request, response) => {
-  pool.query('SELECT * FROM cards WHERE playerid IS NULL ORDER BY id ASC', (error, results) => {
+  pool.query('SELECT * FROM cards WHERE player_id IS NULL AND type != $1 ORDER BY id ASC', ['none'], (error, results) => {
     if (error) {
       throw error
     }
@@ -75,7 +75,7 @@ const getSolution = (request, response) => {
 }
 
 const resetCards = (request, response) => {
-  pool.query('UPDATE cards SET playerid = $1 RETURNING *;', [null], (error, results) => {
+  pool.query('UPDATE cards SET player_id = $1 RETURNING *;', [null], (error, results) => {
     if (error) {
       throw error
     }
@@ -87,7 +87,7 @@ const setCardPlayer = (request, response) => {
   const id = request.params.id;
   const player = request.params.player;
 
-  pool.query('UPDATE cards SET playerid = $1 WHERE id = $2 RETURNING *;', [player, id], (error, results) => {
+  pool.query('UPDATE cards SET player_id = $1 WHERE id = $2 RETURNING *;', [player, id], (error, results) => {
     if (error) {
       throw error
     }
