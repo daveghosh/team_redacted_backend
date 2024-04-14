@@ -12,11 +12,30 @@ app.use(bodyParser.json());
 app.use('/.netlify/functions/server', router);
 app.use("/", router)
 
-router.get('/messages', db.getMessages);
-router.get('/messages/:id', db.getMessageById);
-router.get('./messages/:username', db.getMessagesByUser);
-router.post('/messages', db.createMessage);
-router.delete('/messages/:id', db.deleteMessage);
+router.get('/game', db.getGame)
+router.post('/resetGame', db.resetGame)
+router.post('/turn/:turn', db.updateTurn)
+router.post('/gameMode/:mode', db.updateGameMode);
+
+router.get('/cards', db.getCards)
+router.post('/card/:id/player/:player', db.setCardPlayer)
+router.post('/resetCards', db.resetCards)
+
+router.get('/players', db.getPlayers)
+router.post('/player/:id/:loc/:color', db.addPlayer)
+router.delete('/removePlayers', db.removePlayers)
+router.post('/removePlayer/:id', db.removePlayer)
+router.post('/updateLocation/player/:id/:loc', db.updatePlayerLocation)
+
+router.get('/weapons', db.getWeapons)
+router.post('/updateLocation/weapon/:id/:loc', db.updateWeaponLocation)
+
+router.get('/suggestion', db.getSuggestion)
+router.post('/suggestion/:player/:weapon:/:room/:person', db.makeSuggestion)
+router.post('/suggestionMode/:mode', db.updateSuggestionMode)
+router.post('/counter/:counter', db.submitCounter);
+router.post('/finishSuggestion', db.finishSuggestion);
+
 
 module.exports = app;
 module.exports.handler = serverless(app);
