@@ -7,7 +7,7 @@ connectionString
 
 // game queries
 const getGame = (request, response) => {
-  pool.query('SELECT * FROM game ORDER BY gameno ASC', (error, results) => {
+  pool.query('SELECT * FROM games ORDER BY id ASC', (error, results) => {
     if (error) {
       throw error
     }
@@ -16,7 +16,7 @@ const getGame = (request, response) => {
 }
 
 const resetGame = (request, response) => {
-  pool.query('UPDATE game SET turn = $1, mode = $2 RETURNING *', [0, 'lobby'], (error, results) => {
+  pool.query('UPDATE games SET turn = $1, mode = $2 RETURNING *', [0, 'lobby'], (error, results) => {
     if (error) {
       throw error
     }
@@ -26,7 +26,7 @@ const resetGame = (request, response) => {
 
 const updateGameMode = (request, response) => {
   const mode = request.params.mode;
-  pool.query('UPDATE game SET mode = $1 RETURNING *;', [mode], (error, results) => {
+  pool.query('UPDATE games SET mode = $1 RETURNING *;', [mode], (error, results) => {
     if (error) {
       throw error
     }
@@ -37,7 +37,7 @@ const updateGameMode = (request, response) => {
 const updateTurn = (request, response) => {
   const turnString = request.params.turn;
   const turn = parseInt(turnString);
-  pool.query('UPDATE game SET turn = $1 RETURNING *;', [turn], (error, results) => {
+  pool.query('UPDATE games SET turn = $1 RETURNING *;', [turn], (error, results) => {
     if (error) {
       throw error
     }
@@ -47,7 +47,7 @@ const updateTurn = (request, response) => {
 
 // card queries
 const getCards = (request, response) => {
-  pool.query('SELECT * FROM cards ORDER BY cardno ASC', (error, results) => {
+  pool.query('SELECT * FROM cards ORDER BY id ASC', (error, results) => {
     if (error) {
       throw error
     }
@@ -57,7 +57,7 @@ const getCards = (request, response) => {
 
 const getPlayerCards = (request, response) => {
   const player = request.params.player;
-  pool.query('SELECT * FROM cards WHERE playerid = $1 ORDER BY cardno ASC', [player], (error, results) => {
+  pool.query('SELECT * FROM cards WHERE playerid = $1 ORDER BY id ASC', [player], (error, results) => {
     if (error) {
       throw error
     }
@@ -66,7 +66,7 @@ const getPlayerCards = (request, response) => {
 }
 
 const getSolution = (request, response) => {
-  pool.query('SELECT * FROM cards WHERE playerid IS NULL ORDER BY cardno ASC', (error, results) => {
+  pool.query('SELECT * FROM cards WHERE playerid IS NULL ORDER BY id ASC', (error, results) => {
     if (error) {
       throw error
     }
@@ -87,11 +87,11 @@ const setCardPlayer = (request, response) => {
   const id = request.params.id;
   const player = request.params.player;
 
-  pool.query('UPDATE cards SET playerid = $1 WHERE cardno = $2 RETURNING *;', [player, id], (error, results) => {
+  pool.query('UPDATE cards SET playerid = $1 WHERE id = $2 RETURNING *;', [player, id], (error, results) => {
     if (error) {
       throw error
     }
-    response.status(201).send(`Updated card with ID: ${results.rows[0].cardno}`)
+    response.status(201).send(`Updated card with ID: ${results.rows[0].id}`)
   })
 }
 
@@ -155,7 +155,7 @@ const updatePlayerLocation = (request, response) => {
 
 // weapon queries
 const getWeapons = (request, response) => {
-  pool.query('SELECT * FROM weapons ORDER BY weapon_id ASC', (error, results) => {
+  pool.query('SELECT * FROM weapons ORDER BY id ASC', (error, results) => {
     if (error) {
       throw error
     }
@@ -168,7 +168,7 @@ const updateWeaponLocation = (request, response) => {
   const weaponId = request.params.id;
   const loc = request.params.loc;
 
-  pool.query('UPDATE weapons SET loc = $1 WHERE weapon_id = $2 RETURNING *;', [loc, weaponId], (error, results) => {
+  pool.query('UPDATE weapons SET loc = $1 WHERE id = $2 RETURNING *;', [loc, weaponId], (error, results) => {
     if (error) {
       throw error
     }
@@ -178,7 +178,7 @@ const updateWeaponLocation = (request, response) => {
 
 // suggestion queries
 const getSuggestion = (request, response) => {
-  pool.query('SELECT * FROM suggestion ORDER BY suggestion_id ASC', (error, results) => {
+  pool.query('SELECT * FROM suggestions ORDER BY id ASC', (error, results) => {
     if (error) {
       throw error
     }
@@ -188,11 +188,11 @@ const getSuggestion = (request, response) => {
 
 const updateSuggestionMode = (request, response) => {
   const mode = request.params.mode;
-  pool.query('UPDATE suggestion SET mode = $1 RETURNING *;', [mode], (error, results) => {
+  pool.query('UPDATE suggestions SET mode = $1 RETURNING *;', [mode], (error, results) => {
     if (error) {
       throw error
     }
-    response.status(201).send(`Updated suggestion mode to: ${results.rows[0].mode}`)
+    response.status(201).send(`Updated suggestions mode to: ${results.rows[0].mode}`)
   })
 }
 
@@ -202,7 +202,7 @@ const makeSuggestion = (request, response) => {
   const room = request.params.room;
   const person = request.params.person;
 
-  pool.query('UPDATE suggestion SET player = $1 weapon = $2, room = $3, person = $4, mode = $5 RETURNING *;', [player, weapon, room, person, 'S'], (error, results) => {
+  pool.query('UPDATE suggestions SET player = $1 weapon = $2, room = $3, person = $4, mode = $5 RETURNING *;', [player, weapon, room, person, 'S'], (error, results) => {
     if (error) {
       throw error
     }
@@ -212,7 +212,7 @@ const makeSuggestion = (request, response) => {
 
 const submitCounter = (request, response) => {
   const counter = request.params.counter;
-  pool.query('UPDATE suggestion SET counter = $1 RETURNING *;', [counter], (error, results) => {
+  pool.query('UPDATE suggestions SET counter = $1 RETURNING *;', [counter], (error, results) => {
     if (error) {
       throw error
     }
@@ -221,7 +221,7 @@ const submitCounter = (request, response) => {
 }
 
 const finishSuggestion = (request, response) => {
-  pool.query('UPDATE suggestion SET player = $1 weapon = $2, room = $3, person = $4, mode = $5 RETURNING *;', [null, null, null, null, 'S'], (error, results) => {
+  pool.query('UPDATE suggestions SET player = $1 weapon = $2, room = $3, person = $4, mode = $5 RETURNING *;', [null, null, null, null, 'S'], (error, results) => {
     if (error) {
       throw error
     }
