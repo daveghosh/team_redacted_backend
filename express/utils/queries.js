@@ -3,7 +3,7 @@ const Pool = require('pg').Pool;
 const connectionString = process.env.CONNECTION_STRING;
 let pool;
 
-getPool() {
+const getPool = () => {
   if (!pool) {
     pool = new Pool({
       max: 4,
