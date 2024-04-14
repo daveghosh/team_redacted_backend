@@ -134,9 +134,7 @@ const addPlayer = (request, response) => {
 
   pool.query('INSERT INTO players (id, loc, color, cansuggest, canmove) VALUES ($1, $2, $3, $4, $5), RETURNING *', [id, loc, color, false, true], (error, results) => {
     if (error) {
-      // console.log("Params=", request.params)
-      // throw error
-      response.state(201).send(`Bad parameters: ${request.params}`)
+      throw error
     }
     response.status(201).send(`Player added with ID: ${results.rows[0].id}`)
   })
