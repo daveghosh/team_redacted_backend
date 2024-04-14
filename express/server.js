@@ -20,7 +20,7 @@ router.post('/gameMode/:mode', db.updateGameMode);
 router.get('/cards', db.getCards)
 router.get('/solution', db.getSolution)
 router.get('/cards/:player', db.getPlayerCards)
-router.post('/card/:id/player/:player', db.setCardPlayer)
+router.post('/card/:id/:player', db.setCardPlayer)
 router.post('/resetCards', db.resetCards)
 
 router.get('/players', db.getPlayers)
