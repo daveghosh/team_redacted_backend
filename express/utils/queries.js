@@ -25,7 +25,7 @@ const resetGame = (request, response) => {
 }
 
 const updateGameMode = (request, response) => {
-  const mode = request.params.mode;
+  const mode = request.query.mode;
   pool.query('UPDATE game SET mode = $1 RETURNING *;', [mode], (error, results) => {
     if (error) {
       throw error
@@ -35,7 +35,7 @@ const updateGameMode = (request, response) => {
 }
 
 const updateTurn = (request, response) => {
-  const turnString = request.params.turn;
+  const turnString = request.query.turn;
   const turn = parseInt(turnString);
   pool.query('UPDATE game SET turn = $1 RETURNING *;', [turn], (error, results) => {
     if (error) {
@@ -56,7 +56,7 @@ const getCards = (request, response) => {
 }
 
 const getPlayerCards = (request, response) => {
-  const player = request.params.player;
+  const player = request.query.player;
   pool.query('SELECT * FROM cards WHERE playerid = $1 ORDER BY cardno ASC', [player], (error, results) => {
     if (error) {
       throw error
@@ -84,8 +84,8 @@ const resetCards = (request, response) => {
 }
 
 const setCardPlayer = (request, response) => {
-  const id = request.params.id;
-  const player = request.params.player;
+  const id = request.query.id;
+  const player = request.query.player;
 
   pool.query('UPDATE cards SET playerid = $1 WHERE cardno = $2, RETURNING *;', [player, id], (error, results) => {
     if (error) {
@@ -116,7 +116,7 @@ const removePlayers = (request, response) => {
 }
 
 const removePlayer = (request, response) => {
-  const playerId = request.params.player;
+  const playerId = request.query.player;
 
   pool.query('UPDATE players SET canmove = $1 WHERE id = $1, RETURNING *;', [false, playerId], (error, results) => {
     if (error) {
@@ -128,9 +128,9 @@ const removePlayer = (request, response) => {
 
 const addPlayer = (request, response) => {
 
-  const id = request.params.id;
-  const loc = request.params.loc;
-  const color = request.params.color;
+  const id = request.query.id;
+  const loc = request.query.loc;
+  const color = request.query.color;
 
   pool.query('INSERT INTO players (id, loc, color, cansuggest, canmove) VALUES ($1, $2, $3, $4, $5), RETURNING *', [id, loc, color, false, true], (error, results) => {
     if (error) {
@@ -142,8 +142,8 @@ const addPlayer = (request, response) => {
 
 const updatePlayerLocation = (request, response) => {
 
-  const playerId = request.params.id;
-  const loc = request.params.loc;
+  const playerId = request.query.id;
+  const loc = request.query.loc;
 
   pool.query('UPDATE players SET loc = $1 WHERE id = $2, RETURNING *;', [loc, playerId], (error, results) => {
     if (error) {
@@ -165,8 +165,8 @@ const getWeapons = (request, response) => {
 
 const updateWeaponLocation = (request, response) => {
 
-  const weaponId = request.params.id;
-  const loc = request.params.loc;
+  const weaponId = request.query.id;
+  const loc = request.query.loc;
 
   pool.query('UPDATE weapons SET loc = $1 WHERE weapon_id = $2, RETURNING *;', [loc, weaponId], (error, results) => {
     if (error) {
@@ -187,7 +187,7 @@ const getSuggestion = (request, response) => {
 }
 
 const updateSuggestionMode = (request, response) => {
-  const mode = request.params.mode;
+  const mode = request.query.mode;
   pool.query('UPDATE suggestion SET mode = $1, RETURNING *;', [mode], (error, results) => {
     if (error) {
       throw error
@@ -197,10 +197,10 @@ const updateSuggestionMode = (request, response) => {
 }
 
 const makeSuggestion = (request, response) => {
-  const player = request.params.player;
-  const weapon = request.params.weapon;
-  const room = request.params.room;
-  const person = request.params.person;
+  const player = request.query.player;
+  const weapon = request.query.weapon;
+  const room = request.query.room;
+  const person = request.query.person;
 
   pool.query('UPDATE suggestion SET player = $1 weapon = $2, room = $3, person = $4, mode = $5, RETURNING *;', [player, weapon, room, person, 'S'], (error, results) => {
     if (error) {
@@ -211,7 +211,7 @@ const makeSuggestion = (request, response) => {
 }
 
 const submitCounter = (request, response) => {
-  const counter = request.params.counter;
+  const counter = request.query.counter;
   pool.query('UPDATE suggestion SET counter = $1, RETURNING *;', [counter], (error, results) => {
     if (error) {
       throw error
