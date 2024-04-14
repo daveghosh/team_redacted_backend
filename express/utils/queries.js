@@ -30,7 +30,7 @@ const updateGameMode = (request, response) => {
     if (error) {
       throw error
     }
-    response.status(201).send(`Reset game with id: ${results.rows[0].id}`)
+    response.status(201).send(`Updated game mode to: ${results.rows[0].mode}`)
   })
 }
 
@@ -118,7 +118,7 @@ const removePlayers = (request, response) => {
 const removePlayer = (request, response) => {
   const playerId = request.params.player;
 
-  pool.query('UPDATE players SET canmove = $1 WHERE id = $1, RETURNING *;', [false, playerId], (error, results) => {
+  pool.query('UPDATE players SET canmove = $1 WHERE id = $2, RETURNING *;', [false, playerId], (error, results) => {
     if (error) {
       throw error
     }
@@ -134,6 +134,7 @@ const addPlayer = (request, response) => {
 
   pool.query('INSERT INTO players (id, loc, color, cansuggest, canmove) VALUES ($1, $2, $3, $4, $5), RETURNING *', [id, loc, color, false, true], (error, results) => {
     if (error) {
+      console.log("Params=", request.params)
       throw error
     }
     response.status(201).send(`Player added with ID: ${results.rows[0].id}`)
