@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.use('/.netlify/functions/server', router);
 app.use("/", router)
 
-router.get('/game', db.getGame)
+router.get('/games', db.getGames)
 router.post('/resetGame', db.resetGame)
 router.post('/turn/:turn', db.updateTurn)
 router.post('/gameMode/:mode', db.updateGameMode);

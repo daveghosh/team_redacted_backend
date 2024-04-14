@@ -6,8 +6,8 @@ connectionString,
 max: 5
 });
 
-// game ßqueries
-const getGame = (request, response) => {
+// game queries
+const getGames = (request, response) => {
   pool.query('SELECT * FROM games ORDER BY id ASC', (error, results) => {
     if (error) {
       throw error
